@@ -265,6 +265,7 @@ export class PlayState extends Phaser.State {
 		newHead.hideTween.delay(this.speeds[this.currentSpeed]);
 		newHead.hideTween.start();
 		newHead.hideTween.onComplete.add(() => {
+			newHead.destroy();
 			this.shownHeads--;
 			this.activeHeads[hole] = null;
 		}, this);
