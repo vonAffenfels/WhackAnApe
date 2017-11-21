@@ -23,6 +23,9 @@ export class LoadingState extends Phaser.State {
 
 	    this.game.load.bitmapFont("fnt_va", 'assets/fonts/fnt_va.png', 'assets/fonts/fnt_va.fnt');
 	    this.game.load.bitmapFont("fnt_va_white", 'assets/fonts/fnt_va_white.png', 'assets/fonts/fnt_va_white.fnt');
+
+		this.load.audio("klatsche", ["assets/sounds/klatsche.mp3"]);
+		this.load.audio("ratz_fail", ["assets/sounds/ratz_fail.mp3"]);
 	}
 
 	create() {

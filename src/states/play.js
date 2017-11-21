@@ -215,12 +215,14 @@ export class PlayState extends Phaser.State {
 		head.animations.stop();
 		if (head.headType == Enums.Heads.JUERGEN) {
 			head.frame = 2;
+			this.sndKlatsche.play();
 			this.score += this.scoreGain;
 			this._showMoneyBag(index);
 			this._showScoreText(index, "+" + this.scoreGain);
 		} else {
 			head.frame = 1;
 			let reduce = this.scoreGain * this.game.config.get("ratzFactor");
+			this.sndRatz.play();
 			this.score -= reduce;
 			this._showScoreText(index, "-" + reduce);
 		}
@@ -400,5 +402,8 @@ export class PlayState extends Phaser.State {
 		this.newHighScoreText = this.game.add.bitmapText(centerX, this.finalScoreText.y + (this.finalScoreText.fontSize / 2) + 10, "fnt_va", "NEUER HIGHSCORE", 32);
 		this.newHighScoreText.anchor.setTo(0.5);
 		this.newHighScoreText.visible = false;
+
+		this.sndKlatsche = this.game.add.audio("klatsche");
+		this.sndRatz = this.game.add.audio("ratz_fail");
 	}
 }
