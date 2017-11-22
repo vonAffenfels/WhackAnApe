@@ -6,10 +6,10 @@ export default class GameConfig {
 	constructor() {
 		this._data = {
 			game: {
-				baseWidth: 320,
-				baseHeight: 568,
-				//baseWidth: 750,
-				//baseHeight: 1334,
+				//baseWidth: 320,
+				//baseHeight: 568,
+				baseWidth: 750,
+				baseHeight: 1334,
 				maxWidth: 768,
 				width: "100%",
 				height: "100%",
@@ -38,10 +38,10 @@ export default class GameConfig {
 				1200,
 				1050,
 				900,
-				750,
+				800,
+				700,
 				600,
-				450,
-				300
+				500
 			],
 			showChance: 		0.5
 		};

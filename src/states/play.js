@@ -10,37 +10,37 @@ export class PlayState extends Phaser.State {
 	init() {
 		this.holes = [
 			{
-				xStart: 25, 
-				yStart: 123,
-				size: 80,
-				headPosX: 8,
-				headPosY: 200,
-				bagPosX: 42,
-				bagPosY: 240,
-				textPosX: 60,
-				textPosY: 123
+				xStart: 111, 
+				yStart: 232,
+				size: 160,
+				headPosX: 24,
+				headPosY: 400,
+				bagPosX: 100,
+				bagPosY: 480,
+				textPosX: 135,
+				textPosY: 235
 			},
 			{
-				xStart: 121, 
-				yStart: 123,
-				size: 80,
-				headPosX: 104,
-				headPosY: 200,
-				bagPosX: 138,
-				bagPosY: 240,
-				textPosX: 156,
-				textPosY: 123
+				xStart: 291, 
+				yStart: 232,
+				size: 160,
+				headPosX: 208,
+				headPosY: 400,
+				bagPosX: 280,
+				bagPosY: 480,
+				textPosX: 312,
+				textPosY: 235
 			},
 			{
-				xStart: 220, 
-				yStart: 124,
-				size: 80,
-				headPosX: 205,
-				headPosY: 201,
-				bagPosX: 239,
-				bagPosY: 241,
-				textPosX: 255,
-				textPosY: 124
+				xStart: 480, 
+				yStart: 234,
+				size: 160,
+				headPosX: 395,
+				headPosY: 402,
+				bagPosX: 465,
+				bagPosY: 482,
+				textPosX: 500,
+				textPosY: 236
 			}
 		];
 		this.activeHeads = [];
@@ -185,7 +185,7 @@ export class PlayState extends Phaser.State {
 
 		for (let i = 0; i < this.holes.length; i++) {
 			let hole = this.holes[i];
-			let xStart = this.game.world.centerX - 160 + hole.xStart;
+			let xStart = this.game.world.centerX - 320 + hole.xStart;
 			let yStart = hole.yStart;
 			let xEnd = xStart + hole.size;
 			let yEnd = yStart + hole.size
@@ -230,14 +230,14 @@ export class PlayState extends Phaser.State {
 		head.killTween.start();
 	}
 
-	_showHead(hole, type) {
+	_showHead(hole, type, noHide) {
 		let newHead = null;
 
 		if (hole < 0 || hole >= this.holes.length) {
 			return;
 		}
 
-		let headPosX = this.game.world.centerX - 160 + this.holes[hole].headPosX;
+		let headPosX = this.game.world.centerX - 320 + this.holes[hole].headPosX;
 		let headPosY = this.holes[hole].headPosY;
 
 		if (type == Enums.Heads.JUERGEN) {
@@ -265,7 +265,9 @@ export class PlayState extends Phaser.State {
 		newHead.hideTween = this.game.add.tween(newHead);
 		newHead.hideTween.to({alpha: 0}, 200, Phaser.Easing.Linear.None);
 		newHead.hideTween.delay(this.speeds[this.currentSpeed]);
-		newHead.hideTween.start();
+		if (!noHide) {
+			newHead.hideTween.start();
+		}
 		newHead.hideTween.onComplete.add(() => {
 			newHead.destroy();
 			this.shownHeads--;
@@ -284,7 +286,7 @@ export class PlayState extends Phaser.State {
 		this.activeHeads[hole] = newHead;
 	}
 
-	_showMoneyBag(hole) {
+	_showMoneyBag(hole, noHide) {
 		if (hole < 0 || hole >= this.holes.length) {
 			return;
 		}
@@ -295,37 +297,42 @@ export class PlayState extends Phaser.State {
 			Phaser.ArrayUtils.rotateLeft(animArray);
 		}
 
-		let bagPosX = this.game.world.centerX - 160 + this.holes[hole].bagPosX;
+		let bagPosX = this.game.world.centerX - 320 + this.holes[hole].bagPosX;
 		let bagPosY = this.holes[hole].bagPosY;
 
 		let bag = this.game.add.sprite(bagPosX, bagPosY, "geldsack");
 		bag.anchor.setTo(0, 1);
 		bag.animations.add("bag", animArray);
-		bag.animations.play("bag", 14, true);
 		bag.fallTween = this.game.add.tween(bag);
-		bag.fallTween.to({alpha: 0, y: bagPosY + 150});
+		bag.fallTween.to({alpha: 0, y: bagPosY + 300});
 		bag.fallTween.onComplete.add(() => {
 			bag.destroy();
 		});
-		bag.fallTween.start();
+		if (!noHide) {
+			bag.animations.play("bag", 14, true);
+			bag.fallTween.start();
+		}
 	}
 
-	_showScoreText(hole, text) {
+	_showScoreText(hole, text, noHide) {
 		if (hole < 0 || hole >= this.holes.length) {
 			return;
 		}
 
-		let textPosX = this.game.world.centerX - 160 + this.holes[hole].textPosX;
+		let textPosX = this.game.world.centerX - 320 + this.holes[hole].textPosX;
 		let textPosY = this.holes[hole].textPosY;
 
-		let txt = this.game.add.bitmapText(textPosX, textPosY, "fnt_va", text, 20);
+		let txt = this.game.add.bitmapText(textPosX, textPosY, "fnt_va", text, 40);
 		txt.anchor.setTo(0.5, 1);
 		txt.fallTween = this.game.add.tween(txt);
-		txt.fallTween.to({alpha: 0, y: textPosY - 50});
+		txt.fallTween.to({alpha: 0, y: textPosY - 100});
 		txt.fallTween.onComplete.add(() => {
 			txt.destroy();
 		});
-		txt.fallTween.start();
+
+		if (!noHide) {
+			txt.fallTween.start();	
+		}
 	}
 
 	update() {
@@ -334,6 +341,17 @@ export class PlayState extends Phaser.State {
 		if (this.gameStarted) {
 			this.highscoreText.text = "SCORE: " + this.score;
 		}
+	}
+
+	_drawHolePosition(hole) {
+		if (hole < 0 || hole >= this.holes.length) {
+			return;
+		}
+
+		let grph = this.game.add.graphics(this.holes[hole].xStart, this.holes[hole].yStart);
+		grph.beginFill(0xFF0000);
+		grph.drawRect(0, 0, this.holes[hole].size, this.holes[hole].size);
+		grph.endFill();
 	}
 
 	create() {	
@@ -346,7 +364,7 @@ export class PlayState extends Phaser.State {
 			this._handleTopFieldClick(pointer);
 		})
 
-		this.highscoreText = this.game.add.bitmapText(centerX - 140, 20, "fnt_va_white", "HIGHSCORE: " + this.game.save.get("highscore"), 24);
+		this.highscoreText = this.game.add.bitmapText(centerX - 280, 20, "fnt_va_white", "HIGHSCORE: " + this.game.save.get("highscore"), 36);
 
 		this.knecht = this.game.add.sprite(centerX, this.game.world.height, "knecht", 0);
 		this.knecht.animations.add("whack_0", [1, 0], 4);
@@ -370,36 +388,38 @@ export class PlayState extends Phaser.State {
 			this.countdown.start();
 		}
 
-		this.buttonStart = this.game.add.sprite(centerX, 163, "button_start");
+		this.buttonStart = this.game.add.sprite(centerX, 300, "button_start");
 		this.buttonStart.anchor.setTo(0.5);
+		this.buttonStart.scale.setTo(2);
 		this.buttonStart.inputEnabled = true;
 		this.buttonStart.events.onInputDown.add(startCountdown);
 
-		this.buttonRestart = this.game.add.sprite(centerX, 163, "button_restart");
+		this.buttonRestart = this.game.add.sprite(centerX, 300, "button_restart");
 		this.buttonRestart.anchor.setTo(0.5);
+		this.buttonRestart.scale.setTo(2);
 		this.buttonRestart.visible = false;
 		this.buttonRestart.events.onInputDown.add(startCountdown);
 
-		this.timerText = this.game.add.bitmapText(centerX + 140, 20, "fnt_va_white", "99:99", 24);
+		this.timerText = this.game.add.bitmapText(centerX + 280, 20, "fnt_va_white", "99:99", 36);
 		this.timerText.anchor.setTo(1, 0);
 		this.timerText.visible = false;
 
 		// Countdown
-		this.countdown = new CountdownObject(this.game, centerX, this.game.world.centerY, 3, 128);
+		this.countdown = new CountdownObject(this.game, centerX, this.game.world.centerY, 3, 164);
 		this.countdown.onCountdownEnd.add(() => {
 			this._startGame();
 		}, this);
 		this.countdown.visible = false;
 
-		this.finishText = this.game.add.bitmapText(centerX, this.game.world.centerY, "fnt_va", "ENDE", 92);
+		this.finishText = this.game.add.bitmapText(centerX, this.game.world.centerY, "fnt_va", "ENDE", 148);
 		this.finishText.anchor.setTo(0.5);
 		this.finishText.visible = false;
 
-		this.finalScoreText = this.game.add.bitmapText(centerX, this.finishText.y + (this.finishText.fontSize / 2) + 10, "fnt_va", "SCORE: 9999", 32);
+		this.finalScoreText = this.game.add.bitmapText(centerX, this.finishText.y + (this.finishText.fontSize / 2) + 20, "fnt_va", "SCORE: 9999", 64);
 		this.finalScoreText.anchor.setTo(0.5);
 		this.finalScoreText.visible = false;
 
-		this.newHighScoreText = this.game.add.bitmapText(centerX, this.finalScoreText.y + (this.finalScoreText.fontSize / 2) + 10, "fnt_va", "NEUER HIGHSCORE", 32);
+		this.newHighScoreText = this.game.add.bitmapText(centerX, this.finalScoreText.y + (this.finalScoreText.fontSize / 2) + 20, "fnt_va", "NEUER HIGHSCORE", 64);
 		this.newHighScoreText.anchor.setTo(0.5);
 		this.newHighScoreText.visible = false;
 
