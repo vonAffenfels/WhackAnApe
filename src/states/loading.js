@@ -17,7 +17,7 @@ export class LoadingState extends Phaser.State {
 	    this.game.load.image("top_field", "assets/images/top_0x0.png");
 
 	    this.game.load.spritesheet("geldsack", "assets/images/geldsack.png", 80, 80, 7);
-	    this.game.load.spritesheet("knecht", "assets/images/bottom_knecht_ruprecht.png", 640, 856, 4);
+	    this.game.load.spritesheet("knecht", "assets/images/bottom_knecht_ruprecht.png", 640, 947, 4);
 	    this.game.load.spritesheet("ratz", "assets/images/ratz.png", 220, 190, 2);
 	    this.game.load.spritesheet("juergen", "assets/images/juergen.png", 220, 190, 3);
 
