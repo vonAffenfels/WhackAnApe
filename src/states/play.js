@@ -44,6 +44,7 @@ export class PlayState extends Phaser.State {
 			}
 		];
 		this.activeHeads = [];
+		this.clickedHoles = [];
 		this.shownHeads = 0;
 
 		this.speeds = this.game.config.get("speed");
@@ -198,10 +199,17 @@ export class PlayState extends Phaser.State {
 	}
 
 	_handleHole(index) {
+		if (this.clickedHoles[index]) {
+			return;
+		}
+
 		this.knecht.bringToTop();
 		this.knecht.animations.play("whack_" + index);
 
+		this.clickedHoles[index] = true;
+
 		if (!this.activeHeads[index]) {
+			this.clickedHoles[index] = false;
 			return;
 		}
 
@@ -272,6 +280,7 @@ export class PlayState extends Phaser.State {
 			newHead.destroy();
 			this.shownHeads--;
 			this.activeHeads[hole] = null;
+			this.clickedHoles[hole] = false;
 		}, this);
 
 		newHead.killTween = this.game.add.tween(newHead);
@@ -280,6 +289,7 @@ export class PlayState extends Phaser.State {
 			newHead.destroy();
 			this.shownHeads--;
 			this.activeHeads[hole] = null;
+			this.clickedHoles[hole] = false;
 		}, this);
 
 		this.shownHeads++;
