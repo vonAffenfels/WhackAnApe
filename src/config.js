@@ -26,7 +26,7 @@ export default class GameConfig {
 
 			defaultState: 		Enums.States.BOOT,
 			
-			scoreGain:  		10,
+			scoreGain:  		100,
 			maxTime:			90,
 			ratzChance: 		0.15,
 			ratzFactor: 		3,
